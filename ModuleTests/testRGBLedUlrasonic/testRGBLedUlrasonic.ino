@@ -5,6 +5,7 @@
 #include "RgbUltrasonic.h"
 
 RgbUltrasonic mRUS04(6, 7);//(signal, RGB)
+//RgbUltrasonic mRUS04(8, 9); //(signal, RGB)
 //The RGBLED module should be plugged in teh fourth grove socket with D6, D7
 
 #define BUZZER 5 // the PWM pin the ACTIVE buzzer is attached to
@@ -37,17 +38,19 @@ void setup() {
 }
 void loop() {
   int distance = mRUS04.GetUltrasonicDistance();
-
+  Serial.print("distance is :");
+  Serial.print(distance);
+  Serial.print("cm\t");
   if (distance > 50) {
     mRUS04.SetRgbEffect(E_RGB_ALL, RGB_WHITE, E_EFFECT_BREATHING);
   }
   else {
-    beep(50 - distance / interval * 2 , 20 + distance / 2, 5 + distance );
+    beep(50 - distance / interval * 2 , 20 + distance / 2, distance );
     Serial.print(50 - distance / interval * 2 );
     Serial.print("\t" );
     Serial.print(20 +  distance / 2 );
     Serial.print("\t");
-    Serial.println(5 + distance );
+    Serial.print(5 + distance );
     if (distance < 2) {
       mRUS04.SetRgbEffect(E_RGB_ALL, RGB_RED, E_EFFECT_FLASH);
     }
@@ -73,4 +76,5 @@ void loop() {
       mRUS04.SetRgbEffect(E_RGB_ALL, RGB_YELLOW, E_EFFECT_ROTATE);
     }
   }
+  Serial.println();
 }

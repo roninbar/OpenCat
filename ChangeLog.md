@@ -1,5 +1,154 @@
 # Change Log
 
+## Feb 10, 2023
+* Allow controlling head group while walking.
+* Solve serial overflow.
+* Add random skill command: kx. It can call a random skill in the preset skill list. 
+* Remove some unused tokens to save space.
+
+## Feb 7, 2023
+* Improve the serial read logics. 
+* Print software version on boot up.
+* Add demos for pir, touch, light modules.
+* Allow sending long (450 bytes or 225 notes) melody over the serial port.
+
+## Feb 1, 2023
+* Add task queue within the Arduino code. A sequence of tasks can be performed without the need of another master computer. 
+* Add demo code for 10 customized voice commands. 
+
+## Jan 19, 2023
+* Allow manually select the serial port when the automatic algorithm fails.
+
+## Jan 12, 2023
+* Add demo code for the voice command module. 
+* SkillComposer: Allow importing multiple skills from InstinctX.h.
+
+## Jan 5, 2023
+* Avoid the servos' shaking when booting up.
+* Add demo code for the gesture module.
+
+## Dec 29, 2022
+* SkillComposer: Avoid freezing when dragging the joint sliders.
+
+## Dec 26, 2022
+* Allow a unplug and replug algorithm to tell the intended serial port.
+* SkillCompser: Read the robot's name when starting up.
+
+## Dec 13, 2022
+* Improve the self-calibration algorithm of PCA9685
+
+## Dec 7, 2022
+* SkillComposer: Show warning forlower Python versions.
+
+## Nov 28, 2022
+* FirmwareUploader: Support BiBoard.
+
+## Nov 10, 2022
+* Create test8266Master.ino that can control the robot's motion in sequence.
+
+## Oct 26, 2022
+* Move the detailed initializing functions in **OpenCat.ino**'s setup() to OpenCat.h. 
+* Add a simple example to elaborate the integration of customized sensors. You need to enable "#define OTHER_MODULES" to see its effects. 
+
+## Aug 31, 2022
+* Add a watchdog to reset the board if the initialization for MPU or skills fails.
+* At the last stage of the first configuration process (with #define MAIN_SKETCH commented out), provide an optional step to calibrate the PCA9685's PWM frequency. The calibration value is saved in the EEPROM table to be loaded by the main sketch. 
+* Change the unit of the duration for music notes ('b' and 'B' token) from duration (miliseconds) to half notes (use 2, 4, 8 to represent 1/2, 1/4, 1/8).
+* For Bittle: Add front flip, roll left, roll right, and tune back flip. It's better to remove its head to perform those tricks. 
+* Shrink the size of codes for getting and saving MPU offsets.
+* Won't repeat the last behavior after roll recover.
+* ESP8266WiFiController: won't refresh the page after sending command to save time
+* ESP8266WiFiController: Simplify the cases on the main command page with a dictionary. 
+* Add some new moduleTest codes
+
+## May 8, 2022
+* pyUI/ui.py: Add names to trigger axis
+* pyUI/ui.py: Optimize the layout for Windows machines
+* pyUI/ui.py: Add add hover tips to some buttons
+
+## May 4, 2022
+* pyUI/ui.py: Import and export files
+
+## May 2, 2022
+* pyUI/ui.py: Improve performance with large angles
+* pyUI/ui.py: Show connected ports
+* pyUI/ui.py: Improve logic and workflow for connecting multiple robots
+* pyUI/ui.py: Support connect to one or all robots dynamically
+* pyUI/ui.py: Improve global orientation and translation sliders
+* pyUI/ui.py: Change dial buttons from regular buttons to press-down buttons
+
+## Apr 30, 2022
+* pyUI/ui.py: Mirror single frame during editing
+* pyUI/ui.py: Fix bug in the loop structure when exporting 
+
+## Apr 29, 2022
+* pyUI/ui.py: Add binders (both positive and negative) for joint sliders to control several joints together.
+* pyUI/ui.py: Can control multiple robots at once. 
+* ardSerial: Get return value from threads.
+
+## Apr 24, 2022
+* pyUI/ui.py: Support loading and sending large angles
+* pyUI/ui.py: Optimize panel sizes
+
+## Apr 22, 2022
+* pyUI/ui.py: Support selecting different robot models. Update the center image for the model. 
+* pyUI/ui.py: Support different lanuguages.
+* pyUI/ui.py: Support importing and exporting a multi-frame skill as a behavior or gait. A single frame will always be exported as a posture.
+* pyUI/ui.py: Update the skill frame's state for delete operations.
+* pyUI/ui.py: Check the format of skill data that's manually entered. Pop up a warning window.  
+
+## Apr 20, 2022
+* pyUI/ui.py: Support trigger axis and angles for behaviors
+* pyUI/ui.py: Allow stop when playing frames
+* Add a button to connect and disconnect the robot in the "State Dials" block
+* Change the texts of the state dials to indicate their states
+
+## Apr 19, 2022
+* pyUI/ui.py: Support importing existing skill array and editing them frame by frame. Speed and delay are included. The trigger axis of behaviors has not been implemented.
+* pyUI/ui.py: Export the skill to the robot and print the skill data array in the terminal. 
+
+## Apr 6, 2022
+* Add ui.py in pyUI to allow changing the robot's postures and body tilts with sliders. 
+* Improve the structure of ardSerial.py to allow continuous inputs when it's used as a commandline tool. 
+* Fix a bug when a static posture is called after a gait by resetting the frame to 0.
+
+## Mar 29, 2022
+* Use dataBuffer to hold the incoming serial commands to allow a longer melody and other instructions. newCmd will only be used to hold skill names that are shorter. 
+* Save the serial skill data from the dataBuffer to I2C EEPROM so that it can be recalled. 
+
+## Mar 20, 2022
+* A schedulerToSkill function in serialMaster to summerize the motion commands and generate a new skill array that can be directly used in the instinct.h.
+* Design a convenient macro switch for regular walker, ultrasonic, and voice modes. 
+```cpp
+//you can activate the following modes (they will diable the gyro to save programming space)
+//allowed combinations: RANDOM_MIND, ULTRASONIC, RANDOM_MIND + ULTRASONIC, VOICE
+//#define RANDOM_MIND     //let the robot do random stuffs. use token 'z' to activate/deactivate
+//#define ULTRASONIC      //for Nybble's ultrasonic sensor
+//#define VOICE           //for LD3320 module
+```
+
+## Mar 17, 2022
+### OpenCat2.0 is pushed to the branch 2.0 for beta testers.
+### New Features:
+* **Complete redesign of the code structure to make it easier to understand and insert 3rd party codes.**
+* **Combine WriteInstinct.ino and OpenCat.ino into a single OpenCat.ino.** Use the ```#define MAIN_SKETCH``` macro to switch between the modes. 
+* Fixed many bugs in the original workflow. For example, the robot no longer skips commands randomly.
+* Improved the smoothness of motion and the speed of balance adaption. 
+* A better documented serialMaster Python module and provide a command scheduler in example.py. 
+* **Designd a new token "K"** to send a whole skill array from the Python serial master through serial in realtime then run it locally on the robot.
+* Optimized the token definitions. Print the token after finishing one task as a confirmation to the master program. 
+* Used a new MPU6050 function to avoid using the interrupt pin. **Accelerate the IMU calibration process.** 
+* Enter the joint calibration state by booting up the robot with one side up. 
+* Write a formalized servo class inherited from the AdafruitPWM servo library. Make it easier to change parameters of 3rd party servos.
+* **Use the built-in tone function to generate clean beeps and melody.**
+* Add random actions for the robot to make it more life-like. Use token ‘z’ to turn on/off the feature. 
+* Add angle limits to avoid most cases of of self-collision.
+* Put the skill-related functions into the Skill Class. Combine reused code blocks into single functions.
+* Make more use of the EEPROM and PRGMEM memory to save resources for flash and SRAM.
+* Mirror rightward gaits from the leftward gaits, to save static memory. 
+* Allow both “newline” and “no line ending” for the serial monitor.
+* Add support for LD3320 voice recognition module (the current code works for Chinese).
+
 ## Jan 30, 2022
 * Fix type conversion warnings of skill data.
 * Add demo for testBuzzer.ino using Arduino's built-in tone function. However, it cannot be used for the main program because ATmega328P has only two timers, used up by the IR and IMU. 
